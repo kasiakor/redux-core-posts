@@ -4,29 +4,35 @@ const { createStore } = require("redux");
 const initialState = () => {
   posts: [];
 };
+
+// acton types
+
+const ADD_POST = "ADD_POST";
+const REMOVE_POST = "REMOVE_POST";
+
 // actions
 
 const addPost = (post) => {
   return {
-    type: "ADD_POST",
+    type: ADD_POST,
     payload: post,
   };
 };
 
 const removePost = (id) => {
   return {
-    type: "REMOVE_POST",
+    type: REMOVE_POST,
     id,
   };
 };
 // reducers
 
 const postReducer = (state = initialState, action) => {
-  if (action.type === "ADD_POST") {
+  if (action.type === ADD_POST) {
     return {
       posts: [...(state.posts || []), action.payload],
     };
-  } else if (action.type === "REMOVE_POST") {
+  } else if (action.type === REMOVE_POST) {
     return {
       ...state,
       posts: state.posts.filter((post) => {
