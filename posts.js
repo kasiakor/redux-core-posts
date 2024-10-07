@@ -28,19 +28,19 @@ const removePost = (id) => {
 // reducers
 
 const postReducer = (state = initialState, action) => {
-  if (action.type === ADD_POST) {
-    return {
-      posts: [...(state.posts || []), action.payload],
-    };
-  } else if (action.type === REMOVE_POST) {
-    return {
-      ...state,
-      posts: state.posts.filter((post) => {
-        return post.id !== action.id;
-      }),
-    };
-  } else {
-    return state;
+  switch (action.type) {
+    case ADD_POST:
+      return {
+        posts: [...(state.posts || []), action.payload],
+      };
+    case REMOVE_POST:
+      return {
+        posts: state.posts.filter((post) => {
+          return post.id !== action.id;
+        }),
+      };
+    default:
+      return state;
   }
 };
 // store
