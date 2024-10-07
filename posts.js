@@ -1,14 +1,19 @@
-const { createStore } = require("redux");
+const { createStore, combineReducers } = require("redux");
 // initial state
 
 const initialState = () => {
   posts: [];
 };
 
+const usersInitialState = () => {
+  users: [];
+};
+
 // acton types
 
 const ADD_POST = "ADD_POST";
 const REMOVE_POST = "REMOVE_POST";
+const ADD_USER = "ADD_USER";
 
 // actions
 
@@ -25,6 +30,14 @@ const removePost = (id) => {
     id,
   };
 };
+
+const addUser = (user) => {
+  return {
+    type: ADD_USER,
+    payload: user,
+  };
+};
+
 // reducers
 
 const postReducer = (state = initialState, action) => {
@@ -43,16 +56,40 @@ const postReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+const userReducer = (state = usersInitialState, action) => {
+  switch (action.type) {
+    case ADD_USER:
+      return {
+        users: [...(state.users || []), action.payload],
+      };
+
+    default:
+      return state;
+  }
+};
+
+// combine reducers
+
+const rootReducer = combineReducers({
+  posts: postReducer,
+  users: userReducer,
+});
+
 // store
 
-const store = createStore(postReducer);
+const store = createStore(rootReducer);
 // subscribe
 
 store.subscribe(() => {
-  console.log("new state", store.getState());
+  const data = store.getState();
+  console.log("new state", data);
+  console.log("posts", data.posts);
+  console.log("users", data.users);
 });
 // dispatch actions
 
 store.dispatch(addPost({ id: 1, task: "Go to store" }));
 store.dispatch(addPost({ id: 2, task: "Watch a movie" }));
-store.dispatch(removePost(1));
+store.dispatch(addUser({ name: "John", age: 27 }));
+// store.dispatch(removePost(1));
